@@ -236,10 +236,10 @@
 		(uuid "9fd159ee-85a0-45ad-b4d6-aea6fa1e4e6e")
 	)
 	(pad "2" smd rect
-		(at -8.89 -7.555 90)
+		(at -8.89 -7.62 90)
 		(size 1.6 3.5)
-		(layers "F.Cu" "F.Paste" "B.SilkS" "F.Mask")
-		(uuid "03f9e205-68df-4f58-a332-fa19afe5cbb5")
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "f2ae8e32-dc76-4cef-8023-dc5327292be1")
 	)
 	(pad "3" smd rect
 		(at -8.89 -5.015 90)
