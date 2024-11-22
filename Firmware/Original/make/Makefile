@@ -45,7 +45,7 @@ SRCS += \
   ../usb/usb_winusb.c \
   ../usb_descriptors.c \
   ../startup_rp2040.c \
-  ../../../dap.c \
+  ../dap.c \
 
 DEFINES += \
 
@@ -74,10 +74,6 @@ $(BUILD)/$(BIN).uf2: $(BUILD)/$(BIN).bin
 %.o:
 	@echo CC $@
 	@$(CC) $(CFLAGS) $(filter %/$(subst .o,.c,$(notdir $@)), $(SRCS)) -c -o $@
-
-release: $(BUILD)/$(BIN).uf2
-	@echo release
-	@cp $(BUILD)/$(BIN).uf2 ../../../bin/
 
 directory:
 	@$(MKDIR) -p $(BUILD)
