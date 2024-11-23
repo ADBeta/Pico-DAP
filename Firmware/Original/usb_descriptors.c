@@ -318,8 +318,8 @@ const alignas(4) usb_string_descriptor_zero_t usb_string_descriptor_zero =
 
 const char *usb_strings[] =
 {
-  [USB_STR_MANUFACTURER]  = "Alex Taradov",
-  [USB_STR_PRODUCT]       = "Combined VCP and CMSIS-DAP Adapter",
+  [USB_STR_MANUFACTURER]  = "ADBeta",
+  [USB_STR_PRODUCT]       = "VCP and CMSIS-DAP Adapter",
   [USB_STR_COM_PORT]      = "Virtual COM-Port",
   [USB_STR_CMSIS_DAP_V1]  = "CMSIS-DAP v1 Adapter",
   [USB_STR_CMSIS_DAP_V2]  = "CMSIS-DAP v2 Adapter",
