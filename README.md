@@ -11,4 +11,5 @@ The project is open to the community and any ideas you have.
 ### Pico-DAP-Zero
 The original PCB for this project, using an aftermarket Pico Zero Development
 board  
-![Pico-DAP-Zero_Front](/Images/Pico-DAP-Zero_Front.png) ![Pico-DAP-Zero_Back](/Images/Pico-DAP-Zero_Back.png)  
+<img src="/Images/Pico-DAP-Zero_Front.png" alt="Pico-DAP-Zero_Front" width="200"> <img src="/Images/Pico-DAP-Zero_Back.png" alt="Pico-DAP-Zero_Back" width="200">
+
