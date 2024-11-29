@@ -13,6 +13,23 @@
 #include "dap.h"
 #include "dap_config.h"
 
+
+#include "hardware/uart.h"
+
+
+/*** Pin Definitions *********************************************************/
+#define PIN_UART_TX    0
+#define PIN_UART_RX    1
+#define UART_ID        uart0
+
+
+// TODO: 
+pio_set_function(0, UART_FUNCSEL_NUM(uart0, 0));
+gpio_set_function(1, UART_FUNCSEL_NUM(uart0, 1));
+
+// Initialise UART 0
+uart_init(uart0, 115200);
+
 /*- Definitions -------------------------------------------------------------*/
 #define USB_BUFFER_SIZE        64
 #define UART_WAIT_TIMEOUT      10 // ms
