@@ -8,7 +8,7 @@ BIN = pico-dap
 CC      = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
 SIZE    = arm-none-eabi-size
-BIN2UF2 = picotool uf2 convert
+BIN2UF2 = ../tools/bin2uf2
 
 ifeq ($(OS), Windows_NT)
   MKDIR = gmkdir
@@ -45,7 +45,7 @@ SRCS += \
   ../usb/usb_winusb.c \
   ../usb_descriptors.c \
   ../startup_rp2040.c \
-  ../dap.c \
+  ../dap.c 
 
 DEFINES += \
 
@@ -69,7 +69,7 @@ $(BUILD)/$(BIN).bin: $(BUILD)/$(BIN).elf
 
 $(BUILD)/$(BIN).uf2: $(BUILD)/$(BIN).bin
 	@echo BIN2UF2 $@
-	@$(BIN2UF2) $^ $@
+	@$(BIN2UF2) -i $^ -o $@
 
 %.o:
 	@echo CC $@

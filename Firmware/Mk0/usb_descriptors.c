@@ -16,7 +16,7 @@ const alignas(4) usb_device_descriptor_t usb_device_descriptor =
   .bDeviceProtocol    = USB_DEVICE_PROTOCOL_INTERFACE_ASSOCIATION,
   .bMaxPacketSize0    = USB_CTRL_EP_SIZE,
   .idVendor           = 0x6666,
-  .idProduct          = 0x9931,
+  .idProduct          = 0x4444,
   .bcdDevice          = 0x0100,
   .iManufacturer      = USB_STR_MANUFACTURER,
   .iProduct           = USB_STR_PRODUCT,
@@ -319,7 +319,7 @@ const alignas(4) usb_string_descriptor_zero_t usb_string_descriptor_zero =
 const char *usb_strings[] =
 {
   [USB_STR_MANUFACTURER]  = "ADBeta",
-  [USB_STR_PRODUCT]       = "VCP and CMSIS-DAP Adapter",
+  [USB_STR_PRODUCT]       = "Pi Pico CMSIS-DAP Adapter",
   [USB_STR_COM_PORT]      = "Virtual COM-Port",
   [USB_STR_CMSIS_DAP_V1]  = "CMSIS-DAP v1 Adapter",
   [USB_STR_CMSIS_DAP_V2]  = "CMSIS-DAP v2 Adapter",
