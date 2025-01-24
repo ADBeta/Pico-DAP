@@ -7,24 +7,24 @@ project(pico-dap)
 pico_sdk_init()
 
 # Collect all .c files from the different src subdirectories
-file(GLOB_RECURSE DAP_SOURCES    ./src/dap/*.c)
-file(GLOB_RECURSE SYS_SOURCES    ./src/sys/*.c)
-file(GLOB_RECURSE USB_SOURCES    ./src/usb/*.c)
+# file(GLOB_RECURSE DAP_SOURCES    ./src/dap/*.c)
+# file(GLOB_RECURSE SYS_SOURCES    ./src/sys/*.c)
+# file(GLOB_RECURSE USB_SOURCES    ./src/usb/*.c)
 
 
 add_executable(pico-dap
     ./src/main.c
-	${DAP_SOURCES}
-	${SYS_SOURCES}
-	${USB_SOURCES}
+#	${DAP_SOURCES}
+#	${SYS_SOURCES}
+#	${USB_SOURCES}
 )
 
 # Include all the needed directories
 target_include_directories(pico-dap PRIVATE
 	./include
-    ./include/cmsis
-	./include/sys
-	./include/usb
+#	./include/cmsis
+#	./include/sys
+#	./include/usb
 )
 
 target_link_libraries(pico-dap pico_stdlib)

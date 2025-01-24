@@ -1,18 +1,26 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2022, Alex Taradov <alex@taradov.com>. All rights reserved.
 
-/*- Includes ----------------------------------------------------------------*/
-#include "pico/stdlib.h"
+/*** Includes ****************************************************************/
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-//#include "rp2040.h"
-#include "hal_gpio.h"
-#include "usb.h"
-#include "dap.h"
-#include "dap_config.h"
 
+
+
+
+//#include "rp2040.h"
+//#include "hal_gpio.h"
+//#include "usb.h"
+//#include "dap.h"
+//#include "dap_config.h"
+
+
+#include "pico/stdlib.h"
+#include "hardware/clocks.h"
+#include "hardware/pll.h"
 
 #include "hardware/uart.h"
 
@@ -23,14 +31,81 @@
 #define UART_ID        uart0
 
 
-// TODO: 
+
+
+/*** TODO: NEW CODE **********************************************************/
+
+/*** Main ********************************************************************/
+int main(void)
+{
+	// Enable XOSC
+	// Set PLL 120MHz
+	// Set USB PLL for 48MHz
+	// Manage clock sources
+	// RTC Setup
+	// 1us Watchdog
+	// Enable GPIO
+	
+
+
+
+	/*
+	sys_init();
+	sys_time_init();
+	dap_init();
+	usb_init();
+	usb_cdc_init();
+	usb_hid_init();
+	serial_number_init();
+
+	app_status_timeout = STATUS_TIMEOUT;
+
+	HAL_GPIO_VCP_STATUS_out();
+	HAL_GPIO_VCP_STATUS_clr();
+
+	HAL_GPIO_DAP_STATUS_out();
+	HAL_GPIO_DAP_STATUS_set();
+
+	while(1)
+	{
+		sys_time_task();
+		usb_task();
+		tx_task();
+		rx_task();
+		break_task();
+		uart_timer_task();
+		status_timer_task();
+	}
+
+	*/
+
+
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*** OLD CODE *******
 pio_set_function(0, UART_FUNCSEL_NUM(uart0, 0));
 gpio_set_function(1, UART_FUNCSEL_NUM(uart0, 1));
 
 // Initialise UART 0
 uart_init(uart0, 115200);
 
-/*- Definitions -------------------------------------------------------------*/
+- Definitions -------------------------------------------------------------
 #define USB_BUFFER_SIZE        64
 #define UART_WAIT_TIMEOUT      10 // ms
 #define STATUS_TIMEOUT         250 // ms
@@ -41,7 +116,7 @@ uart_init(uart0, 115200);
 #define F_RTC          (F_REF / 256)
 #define F_TICK         1000000
 
-/*- Variables ---------------------------------------------------------------*/
+- Variables ---------------------------------------------------------------
 static uint8_t app_req_buf_hid[DAP_CONFIG_PACKET_SIZE];
 static uint8_t app_resp_buf_hid[DAP_CONFIG_PACKET_SIZE];
 static uint8_t app_req_buf_bulk[DAP_CONFIG_PACKET_SIZE];
@@ -61,12 +136,11 @@ static bool app_dap_event = false;
 static bool app_vcp_event = false;
 static bool app_vcp_open = false;
 
-/*- Implementations ---------------------------------------------------------*/
+- Implementations ---------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 static void sys_init(void)
 {
-/*
   // Enable XOSC
   XOSC->CTRL     = (XOSC_CTRL_FREQ_RANGE_1_15MHZ << XOSC_CTRL_FREQ_RANGE_Pos);
   XOSC->STARTUP  = 47; // ~1 ms @ 12 MHz
@@ -124,7 +198,6 @@ static void sys_init(void)
   // Enable GPIOs
   RESETS_CLR->RESET = RESETS_RESET_io_bank0_Msk | RESETS_RESET_pads_bank0_Msk;
   while (0 == RESETS->RESET_DONE_b.io_bank0 || 0 == RESETS->RESET_DONE_b.pads_bank0);
-*/
 }
 
 //-----------------------------------------------------------------------------
@@ -396,3 +469,4 @@ int main(void)
 
   return 0;
 }
+*/
