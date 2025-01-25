@@ -1,8 +1,18 @@
-// SPDX-License-Identifier: BSD-3-Clause
-// Copyright (c) 2022, Alex Taradov <alex@taradov.com>. All rights reserved.
-
-/*** Includes ****************************************************************/
-
+/******************************************************************************
+* Pico-DAP MkI
+* Raspberry Pi Pico based CMSIS-DAP and UART Combo USB Device
+* Based on the principals of free-dap:
+* 	Copyright (c) 2022, Alex Taradov <alex@taradov.com>. All rights reserved.
+*
+* Pico-DAP is a total rewrite, focussing on the RP2040 Chip, 
+* i.e Raspberry Pi Pico:
+* 	Copyright (c) 2025, ADBeta
+*
+* Any parts of Pico-DAP used directly from free-dap will retain their original
+* Copyright strings.
+*
+* 25 Jan 2025    V0.0.0
+******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -46,6 +56,19 @@ int main(void)
 	// 1us Watchdog
 	// Enable GPIO
 	
+	// NOTE: Skipping XOSC and PLL Setup, and Clock Source Configuration for
+	// now to test default settings
+	
+	// TODO: RTC Config - necessary?
+
+	// TODO: USB Init
+	
+
+	// TODO: 1us Watchdog
+	
+
+	// TODO: Enable GPIO
+	// GPIO Header with pinout definitions
 
 
 
