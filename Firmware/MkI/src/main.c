@@ -11,7 +11,7 @@
 * Any parts of Pico-DAP used directly from free-dap will retain their original
 * Copyright strings.
 *
-* 25 Jan 2025    V0.0.0
+* 29 Jan 2025    V0.0.1
 ******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
@@ -35,12 +35,15 @@
 #include "hardware/uart.h"
 
 
-/*** Pin Definitions *********************************************************/
-#define PIN_UART_TX    0
-#define PIN_UART_RX    1
-#define UART_ID        uart0
+
+#include "pin_config.h"
 
 
+/*** Function Declarations ***************************************************/
+/// @brief Initalises the GPIO modes, startup states, etc
+/// @param None
+/// @return None
+static void gpio_init(void);
 
 
 /*** TODO: NEW CODE **********************************************************/
@@ -67,8 +70,17 @@ int main(void)
 	// TODO: 1us Watchdog
 	
 
-	// TODO: Enable GPIO
-	// GPIO Header with pinout definitions
+	// Initialise GPIO
+	gpio_init();
+
+	// Initialise the UART Peripheral with a basic baudrate
+	uart_init(PERIPH_UART_ID, 2400);
+	// Disable flow control
+	uart_set_hw_flow(PERIPH_UART_ID, false, false);
+	// Set Data its, Stop Bits and ParityUART_PARITY_NONE
+	uart_set_format(PERIPH_UART_ID, 8, 1, UART_PARITY_NONE);
+	// TODO: Enable FIFO????
+	uart_set_fifo_enabled(PERIPH_UART_ID, false);
 
 
 
@@ -105,6 +117,15 @@ int main(void)
 
 
 	return 0;
+}
+
+/*** Function Definitions ****************************************************/
+static void gpio_init(void)
+{
+
+	// Set UART Pins
+	gpio_set_function(PIN_UART_TX, UART_FUNCSEL_NUM(PERIPH_UART_ID, PIN_UART_TX));
+	gpio_set_function(PIN_UART_RX, UART_FUNCSEL_NUM(PERIPH_UART_ID, PIN_UART_RX));
 }
 
 
