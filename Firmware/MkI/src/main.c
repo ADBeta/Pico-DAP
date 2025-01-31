@@ -11,7 +11,7 @@
 * Any parts of Pico-DAP used directly from free-dap will retain their original
 * Copyright strings.
 *
-* 29 Jan 2025    V0.0.1
+* 31 Jan 2025    V0.0.1
 ******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
@@ -43,7 +43,7 @@
 /// @brief Initalises the GPIO modes, startup states, etc
 /// @param None
 /// @return None
-static void gpio_init(void);
+static void gpio_setup(void);
 
 
 /*** TODO: NEW CODE **********************************************************/
@@ -71,7 +71,7 @@ int main(void)
 	
 
 	// Initialise GPIO
-	gpio_init();
+	gpio_setup();
 
 	// Initialise the UART Peripheral with a basic baudrate
 	uart_init(PERIPH_UART_ID, 2400);
@@ -82,6 +82,7 @@ int main(void)
 	// TODO: Enable FIFO????
 	uart_set_fifo_enabled(PERIPH_UART_ID, false);
 
+	uart_puts(PERIPH_UART_ID, "Testing");
 
 
 	/*
@@ -120,7 +121,7 @@ int main(void)
 }
 
 /*** Function Definitions ****************************************************/
-static void gpio_init(void)
+static void gpio_setup(void)
 {
 
 	// Set UART Pins
