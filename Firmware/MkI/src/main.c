@@ -89,35 +89,37 @@ int main(void)
 	
 
 	// TODO: 1us Watchdog
-	
+
+
+	stdio_init_all();
+	tusb_init();
+
+
 
 	// Initialise GPIO
 	gpio_setup();
 
-	// Initialise the UART Peripheral with a basic baudrate
-	uart_init(PERIPH_UART_ID, 2400);
-	// Disable flow control
-	uart_set_hw_flow(PERIPH_UART_ID, false, false);
-	// Set Data its, Stop Bits and ParityUART_PARITY_NONE
-	uart_set_format(PERIPH_UART_ID, 8, 1, UART_PARITY_NONE);
-	// TODO: Enable FIFO????
-	uart_set_fifo_enabled(PERIPH_UART_ID, false);
+	
+	uart_init(PERIPH_UART_ID, 9600);                                           // Initialise the UART Peripheral with a basic baudrate
+	uart_set_hw_flow(PERIPH_UART_ID, false, false);                            // Disable flow control
+	uart_set_format(PERIPH_UART_ID, 8, 1, UART_PARITY_NONE);                   // Set Data its, Stop Bits and ParityUART_PARITY_NONE
+	uart_set_fifo_enabled(PERIPH_UART_ID, false);                              // TODO: Enable FIFO????
 
-	uart_puts(PERIPH_UART_ID, "Testing");
+	sleep_ms(1000);
+	uart_puts(PERIPH_UART_ID, "\n\rTesting\n\r");
 
 
+/*
+	while (1) {
+		tud_task();  // Handle USB tasks
+		cdc_task();  // Handle CDC communication
+		sleep_ms(10);
+
+		uart_puts(PERIPH_UART_ID, "USB handle");
+	}
+*/
 
 
-
-
-	stdio_init_all();
-    tusb_init();
-
-    while (1) {
-        tud_task();  // Handle USB tasks
-        cdc_task();  // Handle CDC communication
-        sleep_ms(10);
-    }
 
 	/*
 	sys_init();
