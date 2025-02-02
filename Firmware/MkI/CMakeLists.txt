@@ -27,10 +27,11 @@ target_include_directories(pico-dap PRIVATE
 #	./include/usb
 )
 
-target_link_libraries(pico-dap pico_stdlib)
+target_link_libraries(pico-dap pico_stdlib tinyusb_device tinyusb_board)
 
 # Make the linker more verbose
 # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--verbose")
 
 # Create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(pico-dap)
+pico_enable_stdio_usb(pico-dap 1)
