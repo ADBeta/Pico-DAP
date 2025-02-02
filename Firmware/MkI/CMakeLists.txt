@@ -14,6 +14,7 @@ pico_sdk_init()
 
 add_executable(pico-dap
     ./src/main.c
+	./src/usb_descriptors.c
 #	${DAP_SOURCES}
 #	${SYS_SOURCES}
 #	${USB_SOURCES}

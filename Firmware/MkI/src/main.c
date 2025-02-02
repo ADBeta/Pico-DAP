@@ -39,6 +39,27 @@
 #include "pin_config.h"
 
 
+
+
+
+#include "tusb.h"
+
+// Callback when data is received
+void cdc_task(void) {
+    if (tud_cdc_available()) {
+        char buf[64];
+        uint32_t count = tud_cdc_read(buf, sizeof(buf));
+        
+        // Echo back received data
+        tud_cdc_write(buf, count);
+        tud_cdc_write_flush();
+    }
+}
+
+
+
+
+
 /*** Function Declarations ***************************************************/
 /// @brief Initalises the GPIO modes, startup states, etc
 /// @param None
@@ -84,6 +105,19 @@ int main(void)
 
 	uart_puts(PERIPH_UART_ID, "Testing");
 
+
+
+
+
+
+	stdio_init_all();
+    tusb_init();
+
+    while (1) {
+        tud_task();  // Handle USB tasks
+        cdc_task();  // Handle CDC communication
+        sleep_ms(10);
+    }
 
 	/*
 	sys_init();
