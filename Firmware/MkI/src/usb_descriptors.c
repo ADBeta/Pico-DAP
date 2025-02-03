@@ -48,12 +48,10 @@ tusb_desc_device_t const desc_device =
     .bDescriptorType    = TUSB_DESC_DEVICE,
     .bcdUSB             = USB_BCD,
 
-    // Use Interface Association Descriptor (IAD) for CDC
-    // As required by USB Specs IAD's subclass must be common class (2) and protocol must be IAD (1)
-    .bDeviceClass       = TUSB_CLASS_MISC,
-    .bDeviceSubClass    = MISC_SUBCLASS_COMMON,
-    .bDeviceProtocol    = MISC_PROTOCOL_IAD,
-    .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
+	.bDeviceClass       = TUSB_CLASS_CDC,
+	.bDeviceSubClass    = CDC_COMM_SUBCLASS_ABSTRACT_CONTROL_MODEL,
+	.bDeviceProtocol    = CDC_COMM_PROTOCOL_ATCOMMAND,
+	.bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
     .idVendor           = USB_VID,
     .idProduct          = USB_PID,
@@ -80,8 +78,6 @@ enum
 {
   ITF_NUM_CDC_0 = 0,
   ITF_NUM_CDC_0_DATA,
-  ITF_NUM_CDC_1,
-  ITF_NUM_CDC_1_DATA,
   ITF_NUM_TOTAL
 };
 
@@ -94,10 +90,11 @@ enum
   #define EPNUM_CDC_0_OUT     0x02
   #define EPNUM_CDC_0_IN      0x82
 
+/*
   #define EPNUM_CDC_1_NOTIF   0x84
   #define EPNUM_CDC_1_OUT     0x05
   #define EPNUM_CDC_1_IN      0x85
-
+*/
 #elif CFG_TUSB_MCU == OPT_MCU_CXD56
   // CXD56 USB driver has fixed endpoint type (bulk/interrupt/iso) and direction (IN/OUT) by its number
   // 0 control (IN/OUT), 1 Bulk (IN), 2 Bulk (OUT), 3 In (IN), 4 Bulk (IN), 5 Bulk (OUT), 6 In (IN)
@@ -105,9 +102,11 @@ enum
   #define EPNUM_CDC_0_OUT     0x02
   #define EPNUM_CDC_0_IN      0x81
 
+/*
   #define EPNUM_CDC_1_NOTIF   0x86
   #define EPNUM_CDC_1_OUT     0x05
   #define EPNUM_CDC_1_IN      0x84
+*/
 
 #elif defined(TUD_ENDPOINT_ONE_DIRECTION_ONLY)
   // MCUs that don't support a same endpoint number with different direction IN and OUT defined in tusb_mcu.h
@@ -116,18 +115,22 @@ enum
   #define EPNUM_CDC_0_OUT     0x02
   #define EPNUM_CDC_0_IN      0x83
 
+/*
   #define EPNUM_CDC_1_NOTIF   0x84
   #define EPNUM_CDC_1_OUT     0x05
   #define EPNUM_CDC_1_IN      0x86
+*/
 
 #else
   #define EPNUM_CDC_0_NOTIF   0x81
   #define EPNUM_CDC_0_OUT     0x02
   #define EPNUM_CDC_0_IN      0x82
 
+/*
   #define EPNUM_CDC_1_NOTIF   0x83
   #define EPNUM_CDC_1_OUT     0x04
   #define EPNUM_CDC_1_IN      0x84
+*/
 #endif
 
 uint8_t const desc_fs_configuration[] =
@@ -137,9 +140,6 @@ uint8_t const desc_fs_configuration[] =
 
   // 1st CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
   TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_0, 4, EPNUM_CDC_0_NOTIF, 8, EPNUM_CDC_0_OUT, EPNUM_CDC_0_IN, 64),
-
-  // 2nd CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
-  TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_1, 4, EPNUM_CDC_1_NOTIF, 8, EPNUM_CDC_1_OUT, EPNUM_CDC_1_IN, 64),
 };
 
 #if TUD_OPT_HIGH_SPEED

@@ -11,7 +11,7 @@
 * Any parts of Pico-DAP used directly from free-dap will retain their original
 * Copyright strings.
 *
-* 31 Jan 2025    V0.0.1
+* 03 Feb 2025    V0.0.3
 ******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
@@ -92,7 +92,10 @@ int main(void)
 
 
 	stdio_init_all();
+	//board_init();
+	// TODO:
 	tusb_init();
+	tud_init(BOARD_TUD_RHPORT);
 
 
 
@@ -109,15 +112,13 @@ int main(void)
 	uart_puts(PERIPH_UART_ID, "\n\rTesting\n\r");
 
 
-/*
 	while (1) {
 		tud_task();  // Handle USB tasks
 		cdc_task();  // Handle CDC communication
-		sleep_ms(10);
+		sleep_ms(1000);
 
-		uart_puts(PERIPH_UART_ID, "USB handle");
+		uart_puts(PERIPH_UART_ID, "USB handle\n\r");
 	}
-*/
 
 
 
