@@ -41,8 +41,9 @@
 
 
 
-
+#include "bsp/board_api.h"
 #include "tusb.h"
+
 
 // Callback when data is received
 void cdc_task(void) {
@@ -92,9 +93,8 @@ int main(void)
 
 
 	stdio_init_all();
-	//board_init();
+	board_init();
 	// TODO:
-	tusb_init();
 	tud_init(BOARD_TUD_RHPORT);
 
 
@@ -115,7 +115,7 @@ int main(void)
 	while (1) {
 		tud_task();  // Handle USB tasks
 		cdc_task();  // Handle CDC communication
-		sleep_ms(1000);
+		sleep_ms(10);
 
 		uart_puts(PERIPH_UART_ID, "USB handle\n\r");
 	}

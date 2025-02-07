@@ -36,7 +36,7 @@
 #define USB_PID           (0x4000 | _PID_MAP(CDC, 0) | _PID_MAP(MSC, 1) | _PID_MAP(HID, 2) | \
                            _PID_MAP(MIDI, 3) | _PID_MAP(VENDOR, 4) )
 
-#define USB_VID   0xCafe
+#define USB_VID   0x9090
 #define USB_BCD   0x0200
 
 //--------------------------------------------------------------------+
@@ -49,8 +49,8 @@ tusb_desc_device_t const desc_device =
     .bcdUSB             = USB_BCD,
 
 	.bDeviceClass       = TUSB_CLASS_CDC,
-	.bDeviceSubClass    = CDC_COMM_SUBCLASS_ABSTRACT_CONTROL_MODEL,
-	.bDeviceProtocol    = CDC_COMM_PROTOCOL_ATCOMMAND,
+	.bDeviceSubClass    = MISC_SUBCLASS_COMMON,
+	.bDeviceProtocol    = MISC_PROTOCOL_IAD,
 	.bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
     .idVendor           = USB_VID,
@@ -152,9 +152,6 @@ uint8_t const desc_hs_configuration[] =
 
   // 1st CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
   TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_0, 4, EPNUM_CDC_0_NOTIF, 8, EPNUM_CDC_0_OUT, EPNUM_CDC_0_IN, 512),
-
-  // 2nd CDC: Interface number, string index, EP notification address and size, EP data address (out, in) and size.
-  TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_1, 4, EPNUM_CDC_1_NOTIF, 8, EPNUM_CDC_1_OUT, EPNUM_CDC_1_IN, 512),
 };
 
 // device qualifier is mostly similar to device descriptor since we don't change configuration based on speed
