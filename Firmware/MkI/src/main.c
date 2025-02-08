@@ -11,7 +11,7 @@
 * Any parts of Pico-DAP used directly from free-dap will retain their original
 * Copyright strings.
 *
-* 03 Feb 2025    V0.0.3
+* 08 Feb 2025    V0.1.0
 ******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
