@@ -141,31 +141,24 @@ int main(void)
 	static uint32_t prev_usb_millis = 0;
 	static uint32_t prev_led_millis = 0;
 
-
-	bool led = false;
-
 	// Start Infinite loop
 	while(true)
 	{
 
+		if(g_current_millis - prev_usb_millis > MILLIS_USB)
+		{
+			tud_task();
+			cdc_uart_task();
+			prev_usb_millis = g_current_millis;
+		}
+
+
 		if(g_current_millis - prev_led_millis > MILLIS_LED)
 		{
-			gpio_put(PIN_LED_TEST, led);
-			led = !led;
-
+			led_task();
 			prev_led_millis = g_current_millis;
 		}
 		
-		
-		tud_task();
-		cdc_uart_task();
-
-
-		//led_task();
-
-
-
-		sleep_ms(10);   //TODO:
 	} // End Inifinite loop
 
 
@@ -245,6 +238,7 @@ void cdc_uart_task(void)
 
 void led_task(void)
 {
+	// TODO: Improve method. LED stays on when disconnected
 	gpio_put(PIN_LED_TEST, tud_cdc_connected());
 }
 
