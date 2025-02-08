@@ -1,4 +1,10 @@
 /*
+ * USB CDC and DAP TinyUSB Descriptors Configuration file
+ *
+ * Part of Pico-DAP:
+ *     https://github.com/ADBeta/Pico-DAP
+ * (c) ADBeta 2025
+ *
  * The MIT License (MIT)
  *
  * Copyright (c) 2019 Ha Thach (tinyusb.org)

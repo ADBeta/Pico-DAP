@@ -34,27 +34,43 @@
 
 #include "hardware/uart.h"
 
-
-
 #include "pin_config.h"
-
-
-
 
 #include "bsp/board_api.h"
 #include "tusb.h"
 
+/*** Definitions *************************************************************/
+#define CDC_BUFFER_SIZE    64
+#define UART_BUFFER_SIZE   64   // Hardware is only 32bytes
 
-// Callback when data is received
-void cdc_task(void) {
-    if (tud_cdc_available()) {
-        char buf[64];
-        uint32_t count = tud_cdc_read(buf, sizeof(buf));
-        
-        // Echo back received data
-        tud_cdc_write(buf, count);
-        tud_cdc_write_flush();
-    }
+/*** Enums and Types *********************************************************/
+
+
+/*** Globals *****************************************************************/
+
+
+/*** Function Declarations ***************************************************/
+/// @brief USB CDC Task that run in an infinite loop - pushes data back and 
+/// forth from CDC to UART
+/// @param None
+/// @return None
+void cdc_uart_task(void);
+
+/// @brief Handles the LEDs based on system status
+/// @param None
+/// @return None
+void led_task(void);
+
+
+
+
+
+/*** Callback Functions ******************************************************/
+/// @brief Sets the UART baudrate dependinging on what thr USB CDC Device
+/// requested
+void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding) 
+{
+	uart_set_baudrate(PERIPH_UART_ID, p_line_coding->bit_rate);
 }
 
 
@@ -106,18 +122,20 @@ int main(void)
 	uart_init(PERIPH_UART_ID, 9600);                                           // Initialise the UART Peripheral with a basic baudrate
 	uart_set_hw_flow(PERIPH_UART_ID, false, false);                            // Disable flow control
 	uart_set_format(PERIPH_UART_ID, 8, 1, UART_PARITY_NONE);                   // Set Data its, Stop Bits and ParityUART_PARITY_NONE
-	uart_set_fifo_enabled(PERIPH_UART_ID, false);                              // TODO: Enable FIFO????
-
-	sleep_ms(1000);
-	uart_puts(PERIPH_UART_ID, "\n\rTesting\n\r");
+	uart_set_fifo_enabled(PERIPH_UART_ID, true);                               // Enable FIFO buffering of UART
 
 
 	while (1) {
-		tud_task();  // Handle USB tasks
-		cdc_task();  // Handle CDC communication
-		sleep_ms(10);
+		tud_task();
+		cdc_uart_task();
 
-		uart_puts(PERIPH_UART_ID, "USB handle\n\r");
+
+		led_task();
+
+
+
+		sleep_ms(100);   //TODO:
+
 	}
 
 
@@ -160,6 +178,9 @@ int main(void)
 /*** Function Definitions ****************************************************/
 static void gpio_setup(void)
 {
+	gpio_init(PIN_LED_TEST);
+
+	gpio_set_dir(PIN_LED_TEST, GPIO_OUT);
 
 	// Set UART Pins
 	gpio_set_function(PIN_UART_TX, UART_FUNCSEL_NUM(PERIPH_UART_ID, PIN_UART_TX));
@@ -167,10 +188,35 @@ static void gpio_setup(void)
 }
 
 
+void cdc_uart_task(void)
+{
+	static uint8_t cdc_buff[CDC_BUFFER_SIZE];
+	static uint8_t uart_buff[UART_BUFFER_SIZE];
+	// If data is available in the UART, pull it into the buffer, then
+	// push it out to the CDC Device
+	size_t uart_bytes = 0;
+	while(uart_is_readable(PERIPH_UART_ID) && (uart_bytes < UART_BUFFER_SIZE))
+	{
+		uart_buff[uart_bytes] = (uint8_t)uart_getc(PERIPH_UART_ID);
+		uart_bytes++;
+	}
+	tud_cdc_write(uart_buff, uart_bytes);
+	tud_cdc_write_flush();
 
 
+	// If data is available in the CDC Buffer, push it to the UART
+	size_t cdc_bytes = 0;
+	if(tud_cdc_available() && (cdc_bytes = tud_cdc_read(cdc_buff, CDC_BUFFER_SIZE)))
+	{
+		uart_write_blocking(PERIPH_UART_ID, cdc_buff, cdc_bytes);
+	}
+}
 
 
+void led_task(void)
+{
+	gpio_put(PIN_LED_TEST, tud_cdc_connected());
+}
 
 
 

@@ -10,8 +10,9 @@
 #define PIN_UART_TX      0
 #define PIN_UART_RX      1
 
-#define PIN_UART_LED     9
-#define PIN_DAP_LED      10
+#define PIN_LED_TEST     25
+#define PIN_LED_UART     9
+#define PIN_LED_DAP      10
 
 #define PIN_SWCLK_TCK    11
 #define PIN_SWDIO_TMS    12
