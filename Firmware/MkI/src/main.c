@@ -40,14 +40,21 @@
 #include "tusb.h"
 
 /*** Definitions *************************************************************/
-#define CDC_BUFFER_SIZE    64
-#define UART_BUFFER_SIZE   64   // Hardware is only 32bytes
+// UART and CDC Buffer Size - The Hardware UART FIFO is 32Bytes, so this is 
+// the limiting factor - could add a UART IRQ and a Ring Buffer if needed.
+#define CDC_BUFFER_SIZE    32
+#define UART_BUFFER_SIZE   32
+
+// Timing Millisecond Values
+#define MILLIS_USB         10
+#define MILLIS_LED         500
 
 /*** Enums and Types *********************************************************/
 
 
 /*** Globals *****************************************************************/
-
+// Current Milliseconds - Updated by a systick
+volatile uint32_t g_current_millis = 0;
 
 /*** Function Declarations ***************************************************/
 /// @brief USB CDC Task that run in an infinite loop - pushes data back and 
@@ -74,6 +81,12 @@ void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding)
 }
 
 
+/// @breif ticks once per Millisecond and incriments the global counter
+bool ms_timer_callback(__unused struct repeating_timer *t)
+{
+	g_current_millis++;
+	return true;
+}
 
 
 
@@ -83,8 +96,6 @@ void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* p_line_coding)
 /// @return None
 static void gpio_setup(void);
 
-
-/*** TODO: NEW CODE **********************************************************/
 
 /*** Main ********************************************************************/
 int main(void)
@@ -100,43 +111,62 @@ int main(void)
 	// NOTE: Skipping XOSC and PLL Setup, and Clock Source Configuration for
 	// now to test default settings
 	
-	// TODO: RTC Config - necessary?
-
-	// TODO: USB Init
+	// Set up a 1ms timer
+	struct repeating_timer ms_timer;
+    add_repeating_timer_ms(1, ms_timer_callback, NULL, &ms_timer);
 	
 
 	// TODO: 1us Watchdog
 
-
-	stdio_init_all();
+	// TinyUSB Setup - Config the USB Handler to the Board, then initialise
+	// the TinyUSB system
 	board_init();
-	// TODO:
 	tud_init(BOARD_TUD_RHPORT);
 
 
+	// TODO: HID Init???
 
-	// Initialise GPIO
+	// Initialise the LED and UART GPIO
 	gpio_setup();
 
-	
+	// Initialise the UART Hardware
 	uart_init(PERIPH_UART_ID, 9600);                                           // Initialise the UART Peripheral with a basic baudrate
 	uart_set_hw_flow(PERIPH_UART_ID, false, false);                            // Disable flow control
 	uart_set_format(PERIPH_UART_ID, 8, 1, UART_PARITY_NONE);                   // Set Data its, Stop Bits and ParityUART_PARITY_NONE
 	uart_set_fifo_enabled(PERIPH_UART_ID, true);                               // Enable FIFO buffering of UART
 
 
-	while (1) {
+
+	// Loop Timing Variables
+	static uint32_t prev_usb_millis = 0;
+	static uint32_t prev_led_millis = 0;
+
+
+	bool led = false;
+
+	// Start Infinite loop
+	while(true)
+	{
+
+		if(g_current_millis - prev_led_millis > MILLIS_LED)
+		{
+			gpio_put(PIN_LED_TEST, led);
+			led = !led;
+
+			prev_led_millis = g_current_millis;
+		}
+		
+		
 		tud_task();
 		cdc_uart_task();
 
 
-		led_task();
+		//led_task();
 
 
 
-		sleep_ms(100);   //TODO:
-
-	}
+		sleep_ms(10);   //TODO:
+	} // End Inifinite loop
 
 
 
