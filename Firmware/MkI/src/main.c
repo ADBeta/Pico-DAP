@@ -11,7 +11,7 @@
 * Any parts of Pico-DAP used directly from free-dap will retain their original
 * Copyright strings.
 *
-* 08 Feb 2025    V0.1.0
+* 10 Feb 2025    V0.2.0
 ******************************************************************************/
 #include <stdlib.h>
 #include <stdint.h>
@@ -21,17 +21,9 @@
 
 
 
-//#include "rp2040.h"
-//#include "hal_gpio.h"
-//#include "usb.h"
-//#include "dap.h"
-//#include "dap_config.h"
-
-
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
 #include "hardware/pll.h"
-
 #include "hardware/uart.h"
 
 #include "pin_config.h"
@@ -100,24 +92,10 @@ static void gpio_setup(void);
 /*** Main ********************************************************************/
 int main(void)
 {
-	// Enable XOSC
-	// Set PLL 120MHz
-	// Set USB PLL for 48MHz
-	// Manage clock sources
-	// RTC Setup
-	// 1us Watchdog
-	// Enable GPIO
-	
-	// NOTE: Skipping XOSC and PLL Setup, and Clock Source Configuration for
-	// now to test default settings
-	
 	// Set up a 1ms timer
 	struct repeating_timer ms_timer;
     add_repeating_timer_ms(1, ms_timer_callback, NULL, &ms_timer);
 	
-
-	// TODO: 1us Watchdog
-
 	// TinyUSB Setup - Config the USB Handler to the Board, then initialise
 	// the TinyUSB system
 	board_init();
@@ -164,22 +142,6 @@ int main(void)
 
 
 	/*
-	sys_init();
-	sys_time_init();
-	dap_init();
-	usb_init();
-	usb_cdc_init();
-	usb_hid_init();
-	serial_number_init();
-
-	app_status_timeout = STATUS_TIMEOUT;
-
-	HAL_GPIO_VCP_STATUS_out();
-	HAL_GPIO_VCP_STATUS_clr();
-
-	HAL_GPIO_DAP_STATUS_out();
-	HAL_GPIO_DAP_STATUS_set();
-
 	while(1)
 	{
 		sys_time_task();
@@ -202,8 +164,12 @@ int main(void)
 static void gpio_setup(void)
 {
 	gpio_init(PIN_LED_TEST);
+	gpio_init(PIN_LED_UART);
+	gpio_init(PIN_LED_DAP);
 
 	gpio_set_dir(PIN_LED_TEST, GPIO_OUT);
+	gpio_set_dir(PIN_LED_UART, GPIO_OUT);
+	gpio_set_dir(PIN_LED_DAP, GPIO_OUT);
 
 	// Set UART Pins
 	gpio_set_function(PIN_UART_TX, UART_FUNCSEL_NUM(PERIPH_UART_ID, PIN_UART_TX));
@@ -238,8 +204,9 @@ void cdc_uart_task(void)
 
 void led_task(void)
 {
-	// TODO: Improve method. LED stays on when disconnected
-	gpio_put(PIN_LED_TEST, tud_cdc_connected());
+	// Lights the UART LED if the CDC Device is connected
+	// NOTE: Relies on the RING signal when connecting
+	gpio_put(PIN_LED_UAR, tud_cdc_connected());
 }
 
 
