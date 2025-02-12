@@ -34,8 +34,8 @@
 /*** Definitions *************************************************************/
 // UART and CDC Buffer Size - The Hardware UART FIFO is 32Bytes, so this is 
 // the limiting factor - could add a UART IRQ and a Ring Buffer if needed.
-#define CDC_BUFFER_SIZE    32
-#define UART_BUFFER_SIZE   32
+#define CDC_BUFFER_SIZE    64
+#define UART_BUFFER_SIZE   64
 
 // Timing Millisecond Values
 #define MILLIS_USB         10
