@@ -11,12 +11,14 @@ Comms can be done over `JTAG`, `AHB` and `APB`:
 * AHB
 * APB
 
+
 ## Port types
 * JTAG     (Uses JTAG Protocol)
 * SW-DP    (Uses SWD specifically)
 * SWJ-DP   (Uses JTAG Or SWD)
 
 Memory access and JTAG access are possible depending on need
+
 
 ## Hardware Protocol
 - SWCLK - Max 60MHz clock signal
@@ -36,6 +38,7 @@ Extra Trn clock cycle when DDR Changes
 0x00
 
 0x04    CTRL/STAT
+0x0C    RDBUFF
 ```
 
 
@@ -52,12 +55,16 @@ Read Register 0x00 on DP
 
 **Power up Debug Domain**  
 Set CDBGRSTREQ and CDBGRSTACK Bits in CTRL/STAT Address  
-`0x81` `0x00000078 (MSB)`
+`0x81` `0x1E000000 WRITE` NOTE: Why is this 1E when bit 28 29 set????
 
 
+## Read from AP
+`DP (master)` must send 
 
 
 ## Function Ideas
+Init function sends multiple bytes of 0xFF
+
 Struct packed with bit structure
 read/write functions are calls to a generic backend function
 Functions return ack bits as an enum type
